@@ -53,7 +53,7 @@ char ** loadFileAA(char *filename, int *size)
 
 		// Copy each line into the string (use strcpy)
 		strcpy(str, input);
-		printf("<%s>\n", str);
+		//printf("<%s>\n", str);
 
 		// Attach the string to the large array
 		arr[*size] = str;
@@ -99,7 +99,7 @@ char (*loadFile2D(char *filename, int *size))[COLS]
 
 		// Copy each line from the buffer into the array (use strcpy)
 		strcpy(arr[*size], input);
-		printf("<%s>\n", arr[*size]);
+		//printf("<%s>\n", arr[*size]);
 		(*size)++;
 	}
 	
