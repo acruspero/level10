@@ -26,21 +26,45 @@ char ** loadFileAA(char *filename, int *size)
 	    exit(1);
 	}
 	
-	// TODO
-	// Allocate memory for an array of strings (arr).
-	// Read the file line by line.
-    //   Trim newline.
-	//   Expand array if necessary (realloc).
-	//   Allocate memory for the string (str).
-	//   Copy each line into the string (use strcpy).
-	//   Attach the string to the large array (assignment =).
-    // Close the file.
-	
-	// The size should be the number of entries in the array.
+	int capacity = 1;
 	*size = 0;
-	
-	// Return pointer to the array of strings.
-	return NULL;
+
+	// Allocate memory for an array of strings (arr)
+	char **arr = malloc(capacity * sizeof(char *));
+
+	// Read the file line by line
+	char input[1000];
+    while (fgets(input, 1000, in) != NULL)
+	{
+		// Expand array if necessary (realloc)
+		if (*size == capacity)
+		{
+			capacity *= 2;
+			arr = realloc(arr, capacity * sizeof(char *));
+		}
+
+		// Trim newline
+		char *nl = strrchr(input, '\n');
+        if (nl != NULL) *nl = '\0';
+
+		// Allocate memory for the string (str)
+		int length = strlen(input);
+		char *str = malloc(length + 1);
+
+		// Copy each line into the string (use strcpy)
+		strcpy(str, input);
+		printf("<%s>\n", str);
+
+		// Attach the string to the large array
+		arr[*size] = str;
+
+		(*size)++;
+	}
+    // Close the file
+	fclose(in);
+
+	// Return pointer to the array of strings
+	return arr;
 }
 
 char (*loadFile2D(char *filename, int *size))[COLS]
@@ -52,42 +76,74 @@ char (*loadFile2D(char *filename, int *size))[COLS]
 	    exit(1);
 	}
 	
-	// TODO
-	// Allocate memory for an 2D array, using COLS as the width.
-	// Read the file line by line into a buffer.
-    //   Trim newline.
-	//   Expand array if necessary (realloc).
-	//   Copy each line from the buffer into the array (use strcpy).
-    // Close the file.
-	
-	// The size should be the number of entries in the array.
+	int capacity = 1;
 	*size = 0;
 	
-	// Return pointer to the array.
-	return NULL;
+	// Allocate memory for an 2D array, using COLS as the width
+	char (*arr)[COLS] = malloc(capacity * sizeof(char[COLS]));
+
+	// Read the file line by line into a buffer
+	char input[1000];
+    while (fgets(input, 1000, in) != NULL)
+	{
+		// Trim newline
+		char *nl = strrchr(input, '\n');
+        if (nl != NULL) *nl = '\0';
+
+		// Expand array if necessary (realloc)
+		if (*size == capacity)
+		{
+			capacity *= 2;
+			arr = realloc(arr, capacity * sizeof(char[COLS]));
+		}
+
+		// Copy each line from the buffer into the array (use strcpy)
+		strcpy(arr[*size], input);
+		printf("<%s>\n", arr[*size]);
+		(*size)++;
+	}
+	
+	// Close the file
+	fclose(in);
+
+	// Return pointer to the array
+	return arr;
 }
 
 // Search the array for the target string.
 // Return the found string or NULL if not found.
 char * substringSearchAA(char *target, char **lines, int size)
 {
-
+	for (int i = 0; i < size; i++)
+	{
+		if (strstr(lines[i], target)) return lines[i];
+	}
 	return NULL;
 }
 
 char * substringSearch2D(char *target, char (*lines)[COLS], int size)
 {
-    
-    return NULL;
+    for (int i = 0; i < size; i++)
+	{
+		if (strstr(lines[i], target)) return lines[i];
+	}
+	return NULL;
 }
 
 // Free the memory used by the array
 void freeAA(char ** arr, int size)
 {
-
+	for (int i = 0; i < size; i++)
+	{
+		// free each individual string
+		free(arr[i]);
+	}
+	// free the main array
+	free(arr);
 }
+
 
 void free2D(char (*arr)[COLS])
 {
-
+	free(arr); // free main array
 }
